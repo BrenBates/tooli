@@ -102,30 +102,35 @@ app.get("/auth/logout", (req, res) => {
     res.redirect("/");
 });
 
-if (process.env.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname, '../client/build')));
-    app.get('/', function(req, res) {
-        res.sendFile(path.join(__dirname, 'build', 'index.html'));
-    });
-}
+const PORT = 5000;
+app.listen(PORT);
 
-if (process.env.NODE_ENV === "production") {
-    const privateKey = fs.readFileSync('/etc/letsencrypt/live/learnpassportjs.com/privkey.pem', 'utf8');
-    const certificate = fs.readFileSync('/etc/letsencrypt/live/learnpassportjs.com/cert.pem', 'utf8');
-    const ca = fs.readFileSync('/etc/letsencrypt/live/learnpassportjs.com/chain.pem', 'utf8');
-    const credentials = {
-        key: privateKey,
-        cert: certificate,
-        ca: ca
-    };
+console.log(`app listening on PORT ${PORT}`)
 
-    https.createServer(credentials, app).listen(443, () => {
-        console.log('HTTPS Server running on port 443');
-    });
-    http.createServer(function (req, res) {
-        res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
-        res.end();
-    }).listen(80);
-} else if (process.env.NODE_ENV === "development") {
-    app.listen(5000);
-}
+// if (process.env.NODE_ENV === "production") {
+//     app.use(express.static(path.join(__dirname, '../client/build')));
+//     app.get('/', function(req, res) {
+//         res.sendFile(path.join(__dirname, 'build', 'index.html'));
+//     });
+// }
+
+// if (process.env.NODE_ENV === "production") {
+//     const privateKey = fs.readFileSync('/etc/letsencrypt/live/learnpassportjs.com/privkey.pem', 'utf8');
+//     const certificate = fs.readFileSync('/etc/letsencrypt/live/learnpassportjs.com/cert.pem', 'utf8');
+//     const ca = fs.readFileSync('/etc/letsencrypt/live/learnpassportjs.com/chain.pem', 'utf8');
+//     const credentials = {
+//         key: privateKey,
+//         cert: certificate,
+//         ca: ca
+//     };
+
+//     https.createServer(credentials, app).listen(443, () => {
+//         console.log('HTTPS Server running on port 443');
+//     });
+//     http.createServer(function (req, res) {
+//         res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+//         res.end();
+//     }).listen(80);
+// } else if (process.env.NODE_ENV === "development") {
+//     app.listen(5000);
+// }
